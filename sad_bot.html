@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Sad Bot</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background: lightblue;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 16px;
+        }
+
+        .chat {
+            background: white;
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        h2 {
+            text-align: center;
+            margin: 0 0 16px 0;
+        }
+
+        #messages {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 16px;
+            max-height: 350px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .bot, .user {
+            padding: 10px 14px;
+            border-radius: 15px;
+            max-width: 78%;
+            text-align: left;
+            line-height: 1.4;
+            word-wrap: break-word;
+        }
+
+        .bot {
+            background: #f1f0f0;
+            color: #333;
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+        }
+
+        .user {
+            background: #ff69b4;
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+
+        #input-area {
+            display: flex;
+            align-items: stretch;
+            gap: 8px;
+            width: 100%;
+        }
+
+        input {
+            flex: 1;
+            min-width: 0;
+            padding: 10px 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #ff69b4;
+        }
+
+        button {
+            padding: 10px 16px;
+            background: #ff69b4;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        button:hover {
+            background: #ff1493;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="chat">
+        <h2>😔 Sad Bot</h2>
+        <div id="messages"></div>
+
+        <div id="input-area">
+            <input id="answer" placeholder="Type your answer..." onkeydown="if(event.key === 'Enter') send()">
+            <button onclick="send()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            "Why are you feeling sad today?",
+            "Are you feeling lonely?",
+            "What is your favourite activity bro?",
+            "It's okay. You will feel better soon!"
+        ];
+        let count = 0;
+        const messagesDiv = document.getElementById("messages");
+
+        function addMessage(msg, type, isHTML = false) {
+            const box = document.createElement("div");
+            box.className = type;
+
+            if (isHTML) {
+                box.innerHTML = msg;
+            } else {
+                box.textContent = msg;
+            }
+
+            messagesDiv.appendChild(box);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        addMessage(questions[count], "bot");
+
+        function send() {
+            const input = document.getElementById("answer");
+            const reply = input.value.trim();
+
+            if (reply === "") return;
+
+            addMessage(reply, "user");
+            input.value = "";
+            count++;
+
+            if (count < questions.length) {
+                setTimeout(() => {
+                    addMessage(questions[count], "bot");
+                }, 400);
+            } else {
+                setTimeout(() => {
+                    addMessage("Great job! 🎉 You completed all questions!", "bot");
+                    addMessage(
+                        '<a href="https://www.youtube.com/watch?v=ysz5S6PUM-U" target="_blank">Play it & watch 🎬</a>',
+                        "bot",
+                        true
+                    );
+                }, 400);
+
+                document.getElementById("input-area").style.display = "none";
+            }
+        }
+    </script>
+
+</body>
+</html>
